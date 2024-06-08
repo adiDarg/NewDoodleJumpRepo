@@ -1,7 +1,6 @@
-import javax.swing.*;
+
 import java.awt.*;
 import java.util.List;
-import java.util.Random;
 
 public class Doodle {
     private int x,y;
@@ -11,7 +10,7 @@ public class Doodle {
     private final int HEIGHT = 10;
     private double speed;
     private final int GRAVITY = -10;
-    private ImageIcon sprite;
+    private Image sprite;
     public Doodle(){
         x = 10;
         y = 10;
@@ -22,11 +21,17 @@ public class Doodle {
     private void jump(){
         speed = 15;
     }
-    public void moveRight(){
+    public void moveRight(int screenWidth){
         x++;
+        if (x == screenWidth){
+            x = 0;
+        }
     }
-    public void moveLeft(){
+    public void moveLeft(int screenWidth){
         x--;
+        if (x == 0){
+            x = screenWidth;
+        }
     }
     public int getX(){
         return x;
@@ -43,7 +48,7 @@ public class Doodle {
     public int getHEIGHT(){
         return HEIGHT;
     }
-    public void moveVertically(double deltaSeconds, List<Platform> platformList, int screenHeight, int screenWidth){
+    public void moveVertically(double deltaSeconds, List<Platform> platformList){
         for (Platform platform: platformList){
             if (doodleAlignedWithPlatform(platform,deltaSeconds)){
                 jump();
@@ -65,6 +70,6 @@ public class Doodle {
                 (this.y - platform.getHeight() < Math.abs(speed*deltaSeconds) && speed < 0);
     }
     public void paint(Graphics graphics){
-        graphics.drawImage(sprite.getImage(),x,y,WIDTH,HEIGHT,null);
+        graphics.drawImage(sprite,x,y,WIDTH,HEIGHT,null);
     }
 }
