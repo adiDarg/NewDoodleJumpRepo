@@ -5,12 +5,12 @@ import java.util.List;
 
 public class Doodle {
     private int x,y;
-    private int maxHeightReached;
-    private int currentHeight;
-    private final int WIDTH = 10;
-    private final int HEIGHT = 10;
+    private double maxHeightReached;
+    private double currentHeight;
+    private final int WIDTH = 50;
+    private final int HEIGHT = 50;
     private double speed;
-    private final int GRAVITY = -10;
+    private final int GRAVITY = 10;
     private Image sprite;
     private final Image FACE_LEFT =  new ImageIcon("C:\\Users\\Owner\\IdeaProjects\\DoodleJump\\src\\gameImages\\basicGame\\doodleL.png").getImage();
     private final Image FACE_RIGHT = new ImageIcon("C:\\Users\\Owner\\IdeaProjects\\DoodleJump\\src\\gameImages\\basicGame\\doodleR.png").getImage();
@@ -23,7 +23,7 @@ public class Doodle {
         sprite = FACE_LEFT;
     }
     private void jump(){
-        speed = 15;
+        speed = -25;
     }
     public void moveRight(int screenWidth){
         x++;
@@ -55,12 +55,12 @@ public class Doodle {
         return HEIGHT;
     }
     public void moveVertically(double deltaSeconds){
-        y += (int) (speed*deltaSeconds);
-        currentHeight += (int) (speed*deltaSeconds);
+        currentHeight +=  speed*deltaSeconds;
+        y = (int) (currentHeight);
         if (currentHeight > maxHeightReached){
             maxHeightReached = currentHeight;
         }
-        speed -= GRAVITY*deltaSeconds;
+        speed += GRAVITY*deltaSeconds;
     }
     public void checkCollision(double deltaSeconds,List<Platform> platformList){
         for (Platform platform: platformList){
@@ -74,8 +74,8 @@ public class Doodle {
         return y < 0;
     }
     private boolean doodleAlignedWithPlatform(Platform platform, double deltaSeconds){
-        return (this.x >= platform.getX() && this.x <= platform.getX() + platform.getWidth()) &&
-                (this.y - platform.getHeight() < Math.abs(speed*deltaSeconds) && speed < 0);
+        return (this.x + this.WIDTH >= platform.getX() && this.x <= platform.getX() + platform.getWidth()) &&
+                (Math.abs(this.y - platform.getY() + platform.getHeight()) < Math.abs(speed*deltaSeconds) && speed > 0);
     }
     public void paint(Graphics graphics){
         graphics.drawImage(sprite,x,y,WIDTH,HEIGHT,null);
