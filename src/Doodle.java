@@ -5,27 +5,40 @@ import java.util.List;
 
 public class Doodle {
     private int x,y;
+    private double deltaY;
     private double maxHeightReached;
     private double currentHeight;
     private final int WIDTH = 50;
     private final int HEIGHT = 50;
     private double speed;
     private final double HORIZONTAL_SPEED = 5;
-    private final int GRAVITY = 10;
+    private final int NORMAL_GRAVITY = 10;
+    private int currentGravity;
+    private final int MAX_SPEED = -60;
     private Image sprite;
     private final Image FACE_LEFT =  new ImageIcon("C:\\Users\\Owner\\IdeaProjects\\DoodleJump\\src\\gameImages\\basicGame\\doodleL.png").getImage();
     private final Image FACE_RIGHT = new ImageIcon("C:\\Users\\Owner\\IdeaProjects\\DoodleJump\\src\\gameImages\\basicGame\\doodleR.png").getImage();
     private int horizontalMoveDirection;
+    private boolean newMaxReached;
     public Doodle(int screenWidth, int screenHeight){
+        currentGravity = NORMAL_GRAVITY;
         x = screenWidth/2;
         y = screenHeight - 250;
+        deltaY = 0;
         speed = 0;
-        maxHeightReached = y;
-        currentHeight = y;
+        maxHeightReached = screenHeight - y;
+        currentHeight = screenHeight - y;
         sprite = FACE_LEFT;
+        newMaxReached = false;
     }
     private void jump(){
-        speed = -50;
+        speed = MAX_SPEED;
+    }
+    public double getSpeed(){
+        return speed;
+    }
+    public int getMAX_SPEED(){
+        return MAX_SPEED;
     }
     public void moveHorizontal(int screenWidth){
         x += (int) (horizontalMoveDirection * HORIZONTAL_SPEED);
@@ -60,13 +73,21 @@ public class Doodle {
     public int getHEIGHT(){
         return HEIGHT;
     }
+    public int getCurrentGravity(){
+        return currentGravity;
+    }
     public void moveVertically(double deltaSeconds){
-        currentHeight +=  speed*deltaSeconds;
-        y = (int) (currentHeight);
+        currentHeight -= speed*deltaSeconds;
+        deltaY += speed*deltaSeconds;
+        if (Math.abs(deltaY) >= 1){
+            y += (int)deltaY;
+            deltaY -= (int)deltaY;
+        }
         if (currentHeight > maxHeightReached){
             maxHeightReached = currentHeight;
+            newMaxReached = true;
         }
-        speed += GRAVITY*deltaSeconds;
+        speed += currentGravity *deltaSeconds;
     }
     public void checkCollision(double deltaSeconds,List<Platform> platformList){
         for (Platform platform: platformList){
@@ -78,6 +99,21 @@ public class Doodle {
     }
     public boolean hasLost(int screenHeight){
         return y > screenHeight;
+    }
+    public double getMaxHeight(){
+        return maxHeightReached;
+    }
+    public void fly(){
+        new Thread(()->{
+            currentGravity = 0;
+            speed = MAX_SPEED;
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            currentGravity = NORMAL_GRAVITY;
+        }).start();
     }
     private boolean doodleAlignedWithPlatform(Platform platform, double deltaSeconds){
         return (this.x + this.WIDTH >= platform.getX() && this.x <= platform.getX() + platform.getWidth()) &&

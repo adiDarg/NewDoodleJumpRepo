@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -17,6 +16,8 @@ public class GamePanel extends JPanel {
     private final int FPS;
     private Thread gameThread;
     private DoodleKeyListener keyListener;
+    private int highestPlatformY;
+    private boolean firstAdjustment;
     public GamePanel(int x, int y, int width, int height, int FPS){
         SCREEN_WIDTH = width;
         SCREEN_HEIGHT = height;
@@ -26,20 +27,34 @@ public class GamePanel extends JPanel {
         setFocusable(false);
         doodle = new Doodle(SCREEN_WIDTH,SCREEN_HEIGHT);
         platforms = new ArrayList<>();
-        platforms = Platform.generatePlatforms(MIN_PLATFORM_LENGTH,MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT, 0, SCREEN_HEIGHT,SCREEN_WIDTH);
+        platforms = Platform.generatePlatforms(MIN_PLATFORM_LENGTH,MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT, 0, SCREEN_HEIGHT,SCREEN_WIDTH, (ArrayList<Platform>) platforms);
         keyListener = new DoodleKeyListener(doodle, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, SCREEN_WIDTH);
         addKeyListener(keyListener);
         setVisible(false);
+        highestPlatformY = SCREEN_HEIGHT;
+        firstAdjustment = true;
     }
-    private synchronized void adjustScreen(){
-        int yDifference = doodle.getHEIGHT() - doodle.getY();
-        doodle.setY(doodle.getHEIGHT() + yDifference);
-        Random random = new Random();
-        for (Platform platform: platforms){
-            platform.lower(yDifference);
+    private void adjustScreen(){
+        int frames = 30;
+        for (int i = 1; i <= frames; i++){
+            int yDifference = (int) ((Math.pow(doodle.getMAX_SPEED(),2)/ (3 * doodle.getCurrentGravity()) + doodle.getHEIGHT())/frames);
+            doodle.setY(doodle.getY() + yDifference);
+            Random random = new Random();
+            for (Platform platform: platforms){
+                platform.lower(yDifference);
+            }
+            highestPlatformY += yDifference;
+            if (i == frames && !firstAdjustment){
+                platforms = Platform.generatePlatforms(MIN_PLATFORM_LENGTH,MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT, 0,highestPlatformY,SCREEN_WIDTH, (ArrayList<Platform>) platforms);
+                highestPlatformY = 0;
+            }
+            firstAdjustment = false;
+            try {
+                Thread.sleep(250/frames);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
-        LinkedList<Platform> newPlatforms = (LinkedList<Platform>) Platform.generatePlatforms(MIN_PLATFORM_LENGTH,MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT, 0,yDifference,SCREEN_WIDTH);
-        platforms.addAll(newPlatforms);
     }
     public void startGameThread(){
         requestFocus();
@@ -49,7 +64,7 @@ public class GamePanel extends JPanel {
                 doodle.checkCollision(deltaSeconds,platforms);
                 new Thread(()->doodle.moveHorizontal(SCREEN_WIDTH)).start();
                 doodle.moveVertically(deltaSeconds);
-                if (doodle.getY() <= 0)
+                if (doodle.getSpeed() <= doodle.getMAX_SPEED() + (double) (doodle.getCurrentGravity() * FPS) / 1000 && doodle.getY() <= SCREEN_HEIGHT/2 && doodle.getMaxHeight() > (double) SCREEN_HEIGHT / 2 + doodle.getMAX_SPEED())
                     new Thread(this::adjustScreen).start();
                 if (doodle.hasLost(SCREEN_HEIGHT)){
                     break;
@@ -74,6 +89,9 @@ public class GamePanel extends JPanel {
     }
     public void resume(){
         startGameThread();
+    }
+    public int getSCREEN_WIDTH(){
+        return SCREEN_WIDTH;
     }
     public void paintComponent(Graphics graphics){
         super.paintComponent(graphics);
