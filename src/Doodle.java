@@ -10,34 +10,40 @@ public class Doodle {
     private final int WIDTH = 50;
     private final int HEIGHT = 50;
     private double speed;
+    private final double HORIZONTAL_SPEED = 5;
     private final int GRAVITY = 10;
     private Image sprite;
     private final Image FACE_LEFT =  new ImageIcon("C:\\Users\\Owner\\IdeaProjects\\DoodleJump\\src\\gameImages\\basicGame\\doodleL.png").getImage();
     private final Image FACE_RIGHT = new ImageIcon("C:\\Users\\Owner\\IdeaProjects\\DoodleJump\\src\\gameImages\\basicGame\\doodleR.png").getImage();
-    public Doodle(){
-        x = 10;
-        y = 10;
+    private int horizontalMoveDirection;
+    public Doodle(int screenWidth, int screenHeight){
+        x = screenWidth/2;
+        y = screenHeight - 250;
         speed = 0;
         maxHeightReached = y;
         currentHeight = y;
         sprite = FACE_LEFT;
     }
     private void jump(){
-        speed = -25;
+        speed = -50;
     }
-    public void moveRight(int screenWidth){
-        x++;
-        if (x == screenWidth){
-            x = 0;
-        }
-        sprite = FACE_RIGHT;
-    }
-    public void moveLeft(int screenWidth){
-        x--;
-        if (x == 0){
+    public void moveHorizontal(int screenWidth){
+        x += (int) (horizontalMoveDirection * HORIZONTAL_SPEED);
+        if (x <= 0){
             x = screenWidth;
         }
-        sprite = FACE_LEFT;
+        else if (x >= screenWidth){
+            x = 0;
+        }
+        if (horizontalMoveDirection == -1){
+            sprite = FACE_LEFT;
+        }
+        else if (horizontalMoveDirection == 1){
+            sprite = FACE_RIGHT;
+        }
+    }
+    public void setHorizontalMoveDirection(int horizontalMoveDirection){
+        this.horizontalMoveDirection = horizontalMoveDirection;
     }
     public int getX(){
         return x;
@@ -70,12 +76,12 @@ public class Doodle {
             }
         }
     }
-    public boolean hasLost(){
-        return y < 0;
+    public boolean hasLost(int screenHeight){
+        return y > screenHeight;
     }
     private boolean doodleAlignedWithPlatform(Platform platform, double deltaSeconds){
         return (this.x + this.WIDTH >= platform.getX() && this.x <= platform.getX() + platform.getWidth()) &&
-                (Math.abs(this.y - platform.getY() + platform.getHeight()) < Math.abs(speed*deltaSeconds) && speed > 0);
+                (Math.abs(this.y - platform.getY() + platform.getHeight()) < platform.getHeight() && speed > 0);
     }
     public void paint(Graphics graphics){
         graphics.drawImage(sprite,x,y,WIDTH,HEIGHT,null);

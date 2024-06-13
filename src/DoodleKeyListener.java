@@ -13,22 +13,23 @@ public class DoodleKeyListener implements java.awt.event.KeyListener {
     }
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println("Key Pressed");
         if (e.getKeyCode() == leftKey){
-            doodle.moveLeft(screenWidth);
+            doodle.setHorizontalMoveDirection(-1);
         }
         else if (e.getKeyCode() == rightKey){
-            doodle.moveRight(screenWidth);
+            doodle.setHorizontalMoveDirection(1);
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == leftKey || e.getKeyCode() == rightKey){
+            doodle.setHorizontalMoveDirection(0);
+        }
 
     }
 }

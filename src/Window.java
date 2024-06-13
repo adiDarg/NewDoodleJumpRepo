@@ -27,11 +27,12 @@ public class Window extends JFrame {
         this.setResizable(false);
         this.setLayout(null);
         this.setSize(WIDTH, HEIGHT);
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
     public void switchPanels(){
-        menuPanel.setFocusable(!gamePanel.isFocusable());
-        menuPanel.setVisible(!gamePanel.isVisible());
+        menuPanel.setFocusable(!menuPanel.isFocusable());
+        menuPanel.setVisible(!menuPanel.isVisible());
         gamePanel.setFocusable(!gamePanel.isFocusable());
         gamePanel.setVisible(!gamePanel.isVisible());
         if (gamePanel.isVisible()){
