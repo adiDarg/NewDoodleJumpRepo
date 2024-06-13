@@ -31,6 +31,9 @@ public class Platform {
                     break;
                 }
             }
+            if (platformList.isEmpty()){
+                validLocation = true;
+            }
         }
         platformList.add(platformToAdd);
     }

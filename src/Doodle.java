@@ -1,4 +1,5 @@
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
@@ -11,12 +12,15 @@ public class Doodle {
     private double speed;
     private final int GRAVITY = -10;
     private Image sprite;
+    private final Image FACE_LEFT =  new ImageIcon("C:\\Users\\Owner\\IdeaProjects\\DoodleJump\\src\\gameImages\\basicGame\\doodleL.png").getImage();
+    private final Image FACE_RIGHT = new ImageIcon("C:\\Users\\Owner\\IdeaProjects\\DoodleJump\\src\\gameImages\\basicGame\\doodleR.png").getImage();
     public Doodle(){
         x = 10;
         y = 10;
         speed = 0;
         maxHeightReached = y;
         currentHeight = y;
+        sprite = FACE_LEFT;
     }
     private void jump(){
         speed = 15;
@@ -26,12 +30,14 @@ public class Doodle {
         if (x == screenWidth){
             x = 0;
         }
+        sprite = FACE_RIGHT;
     }
     public void moveLeft(int screenWidth){
         x--;
         if (x == 0){
             x = screenWidth;
         }
+        sprite = FACE_LEFT;
     }
     public int getX(){
         return x;
@@ -48,19 +54,21 @@ public class Doodle {
     public int getHEIGHT(){
         return HEIGHT;
     }
-    public void moveVertically(double deltaSeconds, List<Platform> platformList){
-        for (Platform platform: platformList){
-            if (doodleAlignedWithPlatform(platform,deltaSeconds)){
-                jump();
-                break;
-            }
-        }
+    public void moveVertically(double deltaSeconds){
         y += (int) (speed*deltaSeconds);
         currentHeight += (int) (speed*deltaSeconds);
         if (currentHeight > maxHeightReached){
             maxHeightReached = currentHeight;
         }
         speed -= GRAVITY*deltaSeconds;
+    }
+    public void checkCollision(double deltaSeconds,List<Platform> platformList){
+        for (Platform platform: platformList){
+            if (doodleAlignedWithPlatform(platform,deltaSeconds)){
+                jump();
+                break;
+            }
+        }
     }
     public boolean hasLost(){
         return y < 0;
