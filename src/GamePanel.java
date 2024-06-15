@@ -11,28 +11,42 @@ public class GamePanel extends JPanel {
     private final int MIN_PLATFORM_LENGTH = 80;
     private final int MAX_PLATFORM_LENGTH = 100;
     private final int PLATFORM_HEIGHT = 20;
+    public static final int DISTANCE_BETWEEN_LEVELS = 1000;
     private final int SCREEN_WIDTH;
     private final int SCREEN_HEIGHT;
     private final int FPS;
     private Thread gameThread;
     private DoodleKeyListener keyListener;
+    private WindowKeyListener windowKeyListener;
     private final Image BACKGROUND;
-    public GamePanel(int x, int y, int width, int height, int FPS, Image background){
+    private int level;
+    private boolean isPaused;
+    public GamePanel(int x, int y, int width, int height, int FPS, Image background, WindowKeyListener windowKeyListener){
+        this.level = 1;
         this.BACKGROUND = background;
         SCREEN_WIDTH = width;
         SCREEN_HEIGHT = height;
         this.FPS = FPS;
         this.arePlatformsAdded = false;
+        isPaused = false;
+
         setBounds(x,y,SCREEN_WIDTH,SCREEN_HEIGHT);
         setLayout(null);
         setFocusable(false);
+
         platforms = new ArrayList<>();
-        Platform.generatePlatforms(MIN_PLATFORM_LENGTH,MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT, 0, SCREEN_HEIGHT,SCREEN_WIDTH, (ArrayList<Platform>) platforms);
+        Platform.generatePlatforms(MIN_PLATFORM_LENGTH,MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT, 0, SCREEN_HEIGHT,SCREEN_WIDTH, (ArrayList<Platform>) platforms,level);
+
         doodle = new Doodle(SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_WIDTH/2,2*SCREEN_HEIGHT/3);
+
         Platform starter = new Platform(MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT,SCREEN_WIDTH/2 - MAX_PLATFORM_LENGTH/2,2*SCREEN_HEIGHT/3 + doodle.getHEIGHT());
         platforms.add(starter);
+
         keyListener = new DoodleKeyListener(doodle, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, SCREEN_WIDTH);
         addKeyListener(keyListener);
+        this.windowKeyListener = windowKeyListener;
+        addKeyListener(windowKeyListener);
+
         setVisible(false);
     }
     private void adjustScreen(){
@@ -41,7 +55,7 @@ public class GamePanel extends JPanel {
 
             if (i % 15 == 0){
                 arePlatformsAdded = true;
-                Platform.generatePlatforms(MIN_PLATFORM_LENGTH,MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT, -yDifference,0,SCREEN_WIDTH, (ArrayList<Platform>) platforms);
+                Platform.generatePlatforms(MIN_PLATFORM_LENGTH,MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT, -yDifference,0,SCREEN_WIDTH, (ArrayList<Platform>) platforms, level);
                 arePlatformsAdded = false;
             }
             doodle.setY(doodle.getY() + yDifference);
@@ -49,7 +63,6 @@ public class GamePanel extends JPanel {
             for (Platform platform: platforms){
                 platform.lower(yDifference);
             }
-
             try {
                 Thread.sleep(500/FPS);
             } catch (InterruptedException e) {
@@ -60,11 +73,11 @@ public class GamePanel extends JPanel {
     public void startGameThread(){
         requestFocus();
         gameThread = new Thread(() -> {
-            while (true) {
+            while (!isPaused) {
                 double deltaSeconds = (double) FPS / 1000;
                 doodle.checkCollision(deltaSeconds,platforms);
                 new Thread(()->doodle.moveHorizontal(SCREEN_WIDTH)).start();
-                doodle.moveVertically(deltaSeconds);
+                doodle.moveVertically(deltaSeconds,this);
                 if (doodle.getSpeed() <= doodle.getMAX_SPEED() + (double) (doodle.getCurrentGravity() * FPS) / 1000 && doodle.getY() <= SCREEN_HEIGHT/2 && doodle.getMaxHeight() > (double) SCREEN_HEIGHT / 2 + doodle.getMAX_SPEED())
                     new Thread(this::adjustScreen).start();
                 if (doodle.hasLost(SCREEN_HEIGHT)){
@@ -82,23 +95,25 @@ public class GamePanel extends JPanel {
         //ADD LOST SCREEN
     }
     public void pause(){
-        try {
-            gameThread.wait();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        isPaused = true;
     }
     public void resume(){
+        isPaused = false;
         startGameThread();
+    }
+    public void increaseLevel(){
+        level++;
     }
     public void paintComponent(Graphics graphics){
         super.paintComponent(graphics);
-        graphics.drawImage(BACKGROUND,0,0,null);
+        graphics.drawImage(BACKGROUND,0,0,SCREEN_WIDTH,SCREEN_HEIGHT,null);
         doodle.paint(graphics);
         if (arePlatformsAdded)
             return;
-        for (Platform platform: platforms){
-            platform.paint(graphics);
-        }
+        try {
+            for (Platform platform: platforms){
+                platform.paint(graphics);
+            }
+        } catch (Exception ignored){}
     }
 }

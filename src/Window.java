@@ -10,15 +10,16 @@ public class Window extends JFrame {
     public Window () {
         Image background = new ImageIcon("src\\gameImages\\basicGame\\bg-grid.png").getImage();
 
-        menuPanel = new MenuPanel(100,100,background,WIDTH,HEIGHT,this);
+        menuPanel = new MenuPanel(background,WIDTH,HEIGHT,this);
         this.add(menuPanel);
         menuPanel.repaint();
 
-        gamePanel = new GamePanel(0, 0, WIDTH, HEIGHT,FPS,background);
-        this.add(gamePanel);
-
         WindowKeyListener windowKeyListener = new WindowKeyListener(this);
         this.addKeyListener(windowKeyListener);
+
+        gamePanel = new GamePanel(0, 0, WIDTH, HEIGHT,FPS,background,windowKeyListener);
+        this.add(gamePanel);
+
 
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -26,10 +27,16 @@ public class Window extends JFrame {
         this.setSize(WIDTH, HEIGHT);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+        this.setFocusable(true);
     }
-    public void switchPanels(){
+    public void switchToGame(){
         menuPanel.setFocusable(!menuPanel.isFocusable());
         menuPanel.setVisible(!menuPanel.isVisible());
+        gamePanel.setFocusable(!gamePanel.isFocusable());
+        gamePanel.setVisible(!gamePanel.isVisible());
+        gamePanel.resume();
+    }
+    public void switchPanels(){
         gamePanel.setFocusable(!gamePanel.isFocusable());
         gamePanel.setVisible(!gamePanel.isVisible());
         if (gamePanel.isVisible()){
@@ -38,5 +45,7 @@ public class Window extends JFrame {
         else {
             gamePanel.pause();
         }
+        menuPanel.setFocusable(!menuPanel.isFocusable());
+        menuPanel.setVisible(!menuPanel.isVisible());
     }
 }

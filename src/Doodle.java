@@ -40,6 +40,24 @@ public class Doodle {
     public int getMAX_SPEED(){
         return MAX_SPEED;
     }
+    public int getY(){
+        return y;
+    }
+    public void setY(int y){
+        this.y = y;
+    }
+    public int getHEIGHT(){
+        return HEIGHT;
+    }
+    public int getCurrentGravity(){
+        return currentGravity;
+    }
+    public void setSpeed(double speed){
+        this.speed = speed;
+    }
+    public void setHorizontalMoveDirection(int horizontalMoveDirection){
+        this.horizontalMoveDirection = horizontalMoveDirection;
+    }
     public void moveHorizontal(int screenWidth){
         x += (int) (horizontalMoveDirection * HORIZONTAL_SPEED);
         if (x <= -this.WIDTH){
@@ -55,28 +73,7 @@ public class Doodle {
             sprite = FACE_RIGHT;
         }
     }
-    public void setHorizontalMoveDirection(int horizontalMoveDirection){
-        this.horizontalMoveDirection = horizontalMoveDirection;
-    }
-    public int getX(){
-        return x;
-    }
-    public int getY(){
-        return y;
-    }
-    public void setY(int y){
-        this.y = y;
-    }
-    public int getWIDTH(){
-        return WIDTH;
-    }
-    public int getHEIGHT(){
-        return HEIGHT;
-    }
-    public int getCurrentGravity(){
-        return currentGravity;
-    }
-    public void moveVertically(double deltaSeconds){
+    public void moveVertically(double deltaSeconds, GamePanel gamePanel){
         currentHeight -= speed*deltaSeconds;
         deltaY += speed*deltaSeconds;
         if (Math.abs(deltaY) >= 1){
@@ -84,18 +81,30 @@ public class Doodle {
             deltaY -= (int)deltaY;
         }
         if (currentHeight > maxHeightReached){
+            if ((int)maxHeightReached / GamePanel.DISTANCE_BETWEEN_LEVELS < (int)currentHeight / GamePanel.DISTANCE_BETWEEN_LEVELS){
+                new Thread(()->{
+                    gamePanel.increaseLevel();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).start();
+            }
             maxHeightReached = currentHeight;
             newMaxReached = true;
         }
         speed += currentGravity *deltaSeconds;
     }
     public void checkCollision(double deltaSeconds,List<Platform> platformList){
-        for (Platform platform: platformList){
-            if (doodleAlignedWithPlatform(platform,deltaSeconds)){
-                jump();
-                break;
+        try {
+            for (Platform platform: platformList){
+                if (doodleAlignedWithPlatform(platform,deltaSeconds)){
+                    jump();
+                    break;
+                }
             }
-        }
+        } catch (Exception ignored){}
     }
     public boolean hasLost(int screenHeight){
         return y > screenHeight;
@@ -117,7 +126,7 @@ public class Doodle {
     }
     private boolean doodleAlignedWithPlatform(Platform platform, double deltaSeconds){
         return (this.x + this.WIDTH >= platform.getX() && this.x <= platform.getX() + platform.getWidth()) &&
-                (platform.getY() - this.y <= this.HEIGHT && platform.getY() - this.y >= this.HEIGHT - 5 && speed > 0);
+                (platform.getY() - this.y <= this.HEIGHT && platform.getY() - this.y >= this.HEIGHT * 7 / 8 && speed > 0);
     }
     public void paint(Graphics graphics){
         graphics.drawImage(sprite,x,y,WIDTH,HEIGHT,null);

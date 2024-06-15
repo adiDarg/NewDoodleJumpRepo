@@ -8,14 +8,13 @@ public class WindowKeyListener implements KeyListener {
     }
     @Override
     public void keyTyped(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
-            window.switchPanels();
-        }
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
+            window.switchPanels();
+        }
     }
 
     @Override

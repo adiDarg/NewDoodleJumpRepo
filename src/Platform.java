@@ -12,6 +12,7 @@ public class Platform {
     private final int height;
     private static final int MINIMUM_Y_DISTANCE = 70;
     private static final int MINIMUM_X_DISTANCE = 100;
+    private static final int MINIMUM_PLATFORM_SIZE = 50;
     private Image sprite;
     public Platform(int width, int height, int x, int y){
         this.width = width;
@@ -45,12 +46,20 @@ public class Platform {
         } while (!validLocation);
         platformList.add(platformToAdd);
     }
-    public static void generatePlatforms(int minWidth,int maxWidth, int height,int minY, int maxY, int screenWidth, ArrayList<Platform> existingPlatforms){
+    public static void generatePlatforms(int minWidth,int maxWidth, int height,int minY, int maxY, int screenWidth, ArrayList<Platform> existingPlatforms, int level){
         Random random = new Random();
         for (int i = minY; i<= maxY; i += MINIMUM_Y_DISTANCE - 1){
             try {
+                if (minWidth * Math.pow(0.9,level) > MINIMUM_PLATFORM_SIZE){
+                    minWidth = (int)((double)minWidth * Math.pow(0.9,level - 1));
+                    maxWidth = (int)((double)maxWidth * Math.pow(0.9,level - 1));
+                }
+                else {
+                    minWidth = MINIMUM_PLATFORM_SIZE;
+                    maxWidth = MINIMUM_PLATFORM_SIZE + 2;
+                }
                 Platform platform = new Platform(random.nextInt(minWidth,maxWidth),height);
-                Platform.addToList(platform,existingPlatforms,i,i + MINIMUM_Y_DISTANCE,screenWidth);
+                Platform.addToList(platform,existingPlatforms,i,i + MINIMUM_Y_DISTANCE,screenWidth - maxWidth);
             }
             catch (Exception e){
                 break;
