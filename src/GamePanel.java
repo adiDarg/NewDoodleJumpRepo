@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GamePanel extends JPanel {
-    private final Doodle doodle;
+    private Doodle doodle;
     private List<Platform> platforms;
     private boolean arePlatformsAdded;
     private final int MIN_PLATFORM_LENGTH = 80;
@@ -37,12 +37,12 @@ public class GamePanel extends JPanel {
         platforms = new ArrayList<>();
         Platform.generatePlatforms(MIN_PLATFORM_LENGTH,MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT, 0, SCREEN_HEIGHT,SCREEN_WIDTH, (ArrayList<Platform>) platforms,level);
 
-        doodle = new Doodle(SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_WIDTH/2,2*SCREEN_HEIGHT/3);
+        doodle = new Doodle(SCREEN_HEIGHT,SCREEN_WIDTH/2,2*SCREEN_HEIGHT/3);
 
         Platform starter = new Platform(MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT,SCREEN_WIDTH/2 - MAX_PLATFORM_LENGTH/2,2*SCREEN_HEIGHT/3 + doodle.getHEIGHT());
         platforms.add(starter);
 
-        keyListener = new DoodleKeyListener(doodle, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, SCREEN_WIDTH);
+        keyListener = new DoodleKeyListener(doodle, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT);
         addKeyListener(keyListener);
         this.windowKeyListener = windowKeyListener;
         addKeyListener(windowKeyListener);

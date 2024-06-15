@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 public class InstructionsPanel extends JPanel {
-    private Image background;
+    private final Image BACKGROUND;
     private JLabel head;
     private LinkedList<JLabel> body;
     private final int WIDTH;
@@ -18,7 +18,7 @@ public class InstructionsPanel extends JPanel {
         this.setBounds(0,0, WIDTH, HEIGHT);
         this.setFocusable(false);
         this.setLayout(null);
-        this.background = background;
+        this.BACKGROUND = background;
 
         head = new JLabel("INSTRUCTIONS",SwingConstants.CENTER);
         head.setBounds(0, 0, screenWidth, HEAD_LINE_LENGTH);
@@ -89,6 +89,6 @@ public class InstructionsPanel extends JPanel {
     }
     public void paintComponent(Graphics graphics){
         super.paintComponent(graphics);
-        graphics.drawImage(background,0,0,WIDTH,HEIGHT,this);
+        graphics.drawImage(BACKGROUND,0,0,WIDTH,HEIGHT,this);
     }
 }

@@ -4,12 +4,10 @@ public class DoodleKeyListener implements java.awt.event.KeyListener {
     private final Doodle doodle;
     private final int leftKey;
     private final int rightKey;
-    private final int screenWidth;
-    public DoodleKeyListener(Doodle doodle, int leftKey, int rightKey, int screenWidth){
+    public DoodleKeyListener(Doodle doodle, int leftKey, int rightKey){
         this.doodle = doodle;
         this.leftKey = leftKey;
         this.rightKey = rightKey;
-        this.screenWidth = screenWidth;
     }
     @Override
     public void keyTyped(KeyEvent e) {

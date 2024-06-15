@@ -2,7 +2,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -74,9 +73,6 @@ public class Platform {
     }
     public int getWidth(){
         return width;
-    }
-    public int getHeight(){
-        return height;
     }
     public void lower(int deltaY){
         y += deltaY;

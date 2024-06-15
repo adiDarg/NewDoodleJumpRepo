@@ -3,7 +3,7 @@ import java.awt.*;
 public class Window extends JFrame {
     public static final int WIDTH = 500;
     public static final int HEIGHT = 800;
-    private int FPS = 60;
+    private final int FPS = 60;
     private GamePanel gamePanel;
     private MenuPanel menuPanel;
     private InstructionsPanel instructionsPanel;

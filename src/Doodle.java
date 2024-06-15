@@ -19,8 +19,7 @@ public class Doodle {
     private final Image FACE_LEFT =  new ImageIcon("src\\gameImages\\basicGame\\doodleL.png").getImage();
     private final Image FACE_RIGHT = new ImageIcon("src\\gameImages\\basicGame\\doodleR.png").getImage();
     private int horizontalMoveDirection;
-    private boolean newMaxReached;
-    public Doodle(int screenWidth, int screenHeight, int x, int y){
+    public Doodle(int screenHeight, int x, int y){
         currentGravity = NORMAL_GRAVITY;
         this.x = x;
         this.y = y;
@@ -29,7 +28,6 @@ public class Doodle {
         maxHeightReached = screenHeight - y;
         currentHeight = screenHeight - y;
         sprite = FACE_LEFT;
-        newMaxReached = false;
     }
     private void jump(){
         speed = MAX_SPEED;
@@ -92,7 +90,6 @@ public class Doodle {
                 }).start();
             }
             maxHeightReached = currentHeight;
-            newMaxReached = true;
         }
         speed += currentGravity *deltaSeconds;
     }
