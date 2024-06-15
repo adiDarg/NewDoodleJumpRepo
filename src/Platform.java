@@ -51,8 +51,8 @@ public class Platform {
         for (int i = minY; i<= maxY; i += MINIMUM_Y_DISTANCE - 1){
             try {
                 if (minWidth * Math.pow(0.9,level) > MINIMUM_PLATFORM_SIZE){
-                    minWidth = (int)((double)minWidth * Math.pow(0.9,level - 1));
-                    maxWidth = (int)((double)maxWidth * Math.pow(0.9,level - 1));
+                    minWidth = (int)((double)minWidth * Math.pow(0.95,level - 1));
+                    maxWidth = (int)((double)maxWidth * Math.pow(0.95,level - 1));
                 }
                 else {
                     minWidth = MINIMUM_PLATFORM_SIZE;
