@@ -11,10 +11,10 @@ public class Doodle {
     private final int WIDTH = 70;
     private final int HEIGHT = 70;
     private double speed;
-    private final double HORIZONTAL_SPEED = 5;
+    private final double HORIZONTAL_SPEED = 4.5;
     private final int NORMAL_GRAVITY = 30;
     private int currentGravity;
-    private final int MAX_SPEED = -120;
+    private final int MAX_SPEED = -110;
     private Image sprite;
     private final Image FACE_LEFT =  new ImageIcon("src\\gameImages\\basicGame\\doodleL.png").getImage();
     private final Image FACE_RIGHT = new ImageIcon("src\\gameImages\\basicGame\\doodleR.png").getImage();
