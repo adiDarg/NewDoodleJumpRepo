@@ -3,54 +3,55 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class GamePanel extends JPanel {
     private final Doodle doodle;
     private List<Platform> platforms;
-    private final int MIN_PLATFORM_LENGTH = 20;
-    private final int MAX_PLATFORM_LENGTH = 40;
+    private boolean arePlatformsAdded;
+    private final int MIN_PLATFORM_LENGTH = 80;
+    private final int MAX_PLATFORM_LENGTH = 100;
     private final int PLATFORM_HEIGHT = 20;
     private final int SCREEN_WIDTH;
     private final int SCREEN_HEIGHT;
     private final int FPS;
     private Thread gameThread;
     private DoodleKeyListener keyListener;
-    private int highestPlatformY;
-    private boolean firstAdjustment;
-    public GamePanel(int x, int y, int width, int height, int FPS){
+    private final Image BACKGROUND;
+    public GamePanel(int x, int y, int width, int height, int FPS, Image background){
+        this.BACKGROUND = background;
         SCREEN_WIDTH = width;
         SCREEN_HEIGHT = height;
         this.FPS = FPS;
+        this.arePlatformsAdded = false;
         setBounds(x,y,SCREEN_WIDTH,SCREEN_HEIGHT);
         setLayout(null);
         setFocusable(false);
-        doodle = new Doodle(SCREEN_WIDTH,SCREEN_HEIGHT);
         platforms = new ArrayList<>();
-        platforms = Platform.generatePlatforms(MIN_PLATFORM_LENGTH,MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT, 0, SCREEN_HEIGHT,SCREEN_WIDTH, (ArrayList<Platform>) platforms);
+        Platform.generatePlatforms(MIN_PLATFORM_LENGTH,MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT, 0, SCREEN_HEIGHT,SCREEN_WIDTH, (ArrayList<Platform>) platforms);
+        doodle = new Doodle(SCREEN_WIDTH,SCREEN_HEIGHT,SCREEN_WIDTH/2,2*SCREEN_HEIGHT/3);
+        Platform starter = new Platform(MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT,SCREEN_WIDTH/2 - MAX_PLATFORM_LENGTH/2,2*SCREEN_HEIGHT/3 + doodle.getHEIGHT());
+        platforms.add(starter);
         keyListener = new DoodleKeyListener(doodle, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, SCREEN_WIDTH);
         addKeyListener(keyListener);
         setVisible(false);
-        highestPlatformY = SCREEN_HEIGHT;
-        firstAdjustment = true;
     }
     private void adjustScreen(){
-        int frames = 30;
-        for (int i = 1; i <= frames; i++){
-            int yDifference = (int) ((Math.pow(doodle.getMAX_SPEED(),2)/ (3 * doodle.getCurrentGravity()) + doodle.getHEIGHT())/frames);
+        for (int i = 1; i <= FPS; i++){
+            int yDifference = (int) ((Math.pow(doodle.getMAX_SPEED(),2)/ (2 * doodle.getCurrentGravity()) + doodle.getHEIGHT())/FPS);
+
+            if (i % 15 == 0){
+                arePlatformsAdded = true;
+                Platform.generatePlatforms(MIN_PLATFORM_LENGTH,MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT, -yDifference,0,SCREEN_WIDTH, (ArrayList<Platform>) platforms);
+                arePlatformsAdded = false;
+            }
             doodle.setY(doodle.getY() + yDifference);
-            Random random = new Random();
+
             for (Platform platform: platforms){
                 platform.lower(yDifference);
             }
-            highestPlatformY += yDifference;
-            if (i == frames && !firstAdjustment){
-                platforms = Platform.generatePlatforms(MIN_PLATFORM_LENGTH,MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT, 0,highestPlatformY,SCREEN_WIDTH, (ArrayList<Platform>) platforms);
-                highestPlatformY = 0;
-            }
-            firstAdjustment = false;
+
             try {
-                Thread.sleep(250/frames);
+                Thread.sleep(500/FPS);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -90,12 +91,12 @@ public class GamePanel extends JPanel {
     public void resume(){
         startGameThread();
     }
-    public int getSCREEN_WIDTH(){
-        return SCREEN_WIDTH;
-    }
     public void paintComponent(Graphics graphics){
         super.paintComponent(graphics);
+        graphics.drawImage(BACKGROUND,0,0,null);
         doodle.paint(graphics);
+        if (arePlatformsAdded)
+            return;
         for (Platform platform: platforms){
             platform.paint(graphics);
         }

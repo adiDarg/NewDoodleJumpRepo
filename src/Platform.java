@@ -10,13 +10,20 @@ public class Platform {
     private int x,y;
     private final int width;
     private final int height;
-    private static final int MINIMUM_Y_DISTANCE = 30;
-    private static final int MINIMUM_X_DISTANCE = 1000;
+    private static final int MINIMUM_Y_DISTANCE = 70;
+    private static final int MINIMUM_X_DISTANCE = 100;
     private Image sprite;
+    public Platform(int width, int height, int x, int y){
+        this.width = width;
+        this.height = height;
+        sprite = new ImageIcon("src\\gameImages\\basicGame\\p-green.png").getImage();
+        this.x = x;
+        this.y = y;
+    }
     public Platform(int width, int height){
         this.width = width;
         this.height = height;
-        sprite = new ImageIcon("C:\\Users\\Owner\\IdeaProjects\\DoodleJump\\src\\gameImages\\basicGame\\p-green.png").getImage();
+        sprite = new ImageIcon("src\\gameImages\\basicGame\\p-green.png").getImage();
     }
     public static void addToList(Platform platformToAdd,List<Platform> platformList, int lowerBound, int upperBound, int screenWidth){
         Random random = new Random();
@@ -38,7 +45,7 @@ public class Platform {
         } while (!validLocation);
         platformList.add(platformToAdd);
     }
-    public static List<Platform> generatePlatforms(int minWidth,int maxWidth, int height,int minY, int maxY, int screenWidth, ArrayList<Platform> existingPlatforms){
+    public static void generatePlatforms(int minWidth,int maxWidth, int height,int minY, int maxY, int screenWidth, ArrayList<Platform> existingPlatforms){
         Random random = new Random();
         for (int i = minY; i<= maxY; i += MINIMUM_Y_DISTANCE - 1){
             try {
@@ -49,7 +56,6 @@ public class Platform {
                 break;
             }
         }
-        return existingPlatforms;
     }
     public int getX(){
         return x;

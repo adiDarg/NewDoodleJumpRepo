@@ -8,22 +8,22 @@ public class Doodle {
     private double deltaY;
     private double maxHeightReached;
     private double currentHeight;
-    private final int WIDTH = 50;
-    private final int HEIGHT = 50;
+    private final int WIDTH = 70;
+    private final int HEIGHT = 70;
     private double speed;
     private final double HORIZONTAL_SPEED = 5;
-    private final int NORMAL_GRAVITY = 10;
+    private final int NORMAL_GRAVITY = 30;
     private int currentGravity;
-    private final int MAX_SPEED = -60;
+    private final int MAX_SPEED = -120;
     private Image sprite;
-    private final Image FACE_LEFT =  new ImageIcon("C:\\Users\\Owner\\IdeaProjects\\DoodleJump\\src\\gameImages\\basicGame\\doodleL.png").getImage();
-    private final Image FACE_RIGHT = new ImageIcon("C:\\Users\\Owner\\IdeaProjects\\DoodleJump\\src\\gameImages\\basicGame\\doodleR.png").getImage();
+    private final Image FACE_LEFT =  new ImageIcon("src\\gameImages\\basicGame\\doodleL.png").getImage();
+    private final Image FACE_RIGHT = new ImageIcon("src\\gameImages\\basicGame\\doodleR.png").getImage();
     private int horizontalMoveDirection;
     private boolean newMaxReached;
-    public Doodle(int screenWidth, int screenHeight){
+    public Doodle(int screenWidth, int screenHeight, int x, int y){
         currentGravity = NORMAL_GRAVITY;
-        x = screenWidth/2;
-        y = screenHeight - 250;
+        this.x = x;
+        this.y = y;
         deltaY = 0;
         speed = 0;
         maxHeightReached = screenHeight - y;
@@ -42,7 +42,7 @@ public class Doodle {
     }
     public void moveHorizontal(int screenWidth){
         x += (int) (horizontalMoveDirection * HORIZONTAL_SPEED);
-        if (x <= 0){
+        if (x <= -this.WIDTH){
             x = screenWidth;
         }
         else if (x >= screenWidth){
@@ -117,7 +117,7 @@ public class Doodle {
     }
     private boolean doodleAlignedWithPlatform(Platform platform, double deltaSeconds){
         return (this.x + this.WIDTH >= platform.getX() && this.x <= platform.getX() + platform.getWidth()) &&
-                (Math.abs(this.y - platform.getY() + platform.getHeight()) < platform.getHeight() && speed > 0);
+                (platform.getY() - this.y <= this.HEIGHT && platform.getY() - this.y >= this.HEIGHT - 5 && speed > 0);
     }
     public void paint(Graphics graphics){
         graphics.drawImage(sprite,x,y,WIDTH,HEIGHT,null);

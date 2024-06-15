@@ -1,24 +1,21 @@
 import javax.swing.*;
 import java.awt.*;
 public class Window extends JFrame {
-    public static final int WIDTH = 400;
-    public static final int HEIGHT = 600;
+    public static final int WIDTH = 500;
+    public static final int HEIGHT = 800;
     private int FPS = 60;
     private GamePanel gamePanel;
     private MenuPanel menuPanel;
 
     public Window () {
-        gamePanel = new GamePanel(0, 0, WIDTH, HEIGHT,FPS);
-        this.add(gamePanel);
-        menuPanel = new MenuPanel(0,0,WIDTH,HEIGHT,this);
-        this.add(menuPanel);
-        ImageIcon imageIcon = new ImageIcon("Background/ggg.jpg");
-        Image scaledImage = imageIcon.getImage().getScaledInstance(WIDTH,HEIGHT,100);
-        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+        Image background = new ImageIcon("src\\gameImages\\basicGame\\bg-grid.png").getImage();
 
-        /*JLabel label = new JLabel();
-        label.setIcon(scaledIcon);
-        gamePanel.add(label);*/
+        menuPanel = new MenuPanel(100,100,background,WIDTH,HEIGHT,this);
+        this.add(menuPanel);
+        menuPanel.repaint();
+
+        gamePanel = new GamePanel(0, 0, WIDTH, HEIGHT,FPS,background);
+        this.add(gamePanel);
 
         WindowKeyListener windowKeyListener = new WindowKeyListener(this);
         this.addKeyListener(windowKeyListener);

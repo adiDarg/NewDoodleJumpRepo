@@ -2,33 +2,39 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MenuPanel extends JPanel {
-    private final int SCREEN_WIDTH;
-    private final int SCREEN_HEIGHT;
+    public String gameName;
+    private JButton howToPlay;
+    private JButton startGame;
+    private final Image BACKGROUND;
+    private final int WIDTH;
+    private final int HEIGHT;
 
-    public MenuPanel(int x, int y, int width, int height, Window window) {
-        super();
-        SCREEN_WIDTH = width;
-        SCREEN_HEIGHT = height;
-        setBounds(x, y, SCREEN_WIDTH, SCREEN_HEIGHT);
-        setLayout(null);
-        setFocusable(true);
-        setVisible(true);
-        JButton start = new JButton();
-        start.setText("START GAME");
-        start.setBounds(width/10 + x,height * 6/10 + y, width/10,height/10);
-        start.addActionListener((event)->{
-            this.remove(start);
+    public MenuPanel(int buttonWidth, int buttonHeight, Image background,int width, int height, Window window){
+        this.BACKGROUND = background;
+        this.WIDTH = width;
+        this.HEIGHT = height;
+
+        gameName ="Doodle Jump";
+        this.setBounds(0,0, Window.WIDTH, Window.HEIGHT);
+        this.setLayout(null);
+        this.setFocusable(true);
+
+        howToPlay = new JButton();
+        howToPlay.setBounds((Window.WIDTH-buttonWidth)/3, Window.HEIGHT/2,buttonWidth,buttonHeight);
+        this.add(howToPlay);
+
+        startGame = new JButton();
+        startGame.setBounds(2*(Window.WIDTH-buttonWidth)/3, Window.HEIGHT/2,buttonWidth,buttonHeight);
+        startGame.addActionListener((event) ->{
             window.switchPanels();
-        });
-        JButton instructions = new JButton();
-        instructions.setText("INSTRUCTIONS");
-        instructions.setBounds(width * 4/5, height * 6/10, width/10, height/10);
-        instructions.addActionListener((event)->{
-            showInstructions();
-        });
-        this.add(start);
-        this.add(instructions);
+        } );
+        this.add(startGame);
+
+        this.setVisible(true);
     }
-    public void showInstructions(){
+    @Override
+    public void paintComponents(Graphics g) {
+        super.paintComponents(g);
+        g.drawImage(BACKGROUND,0,0,this);
     }
 }
