@@ -15,7 +15,7 @@ public class MenuPanel extends JPanel {
         this.WIDTH = width;
         this.HEIGHT = height;
 
-        this.setBounds(0,0, Window.WIDTH, Window.HEIGHT);
+        this.setBounds(0,0, WIDTH, HEIGHT);
         this.setLayout(null);
         this.setFocusable(true);
 
@@ -30,8 +30,7 @@ public class MenuPanel extends JPanel {
         howToPlay.setFocusPainted(false);
 
         howToPlay.addActionListener((event) ->{
-
-
+            window.switchBetweenMenuAndInstructions();
         });
         this.add(howToPlay);
 

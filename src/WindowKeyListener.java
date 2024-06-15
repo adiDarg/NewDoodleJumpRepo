@@ -13,7 +13,7 @@ public class WindowKeyListener implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
-            window.switchPanels();
+            window.switchBetweenMenuAndGame();
         }
     }
 

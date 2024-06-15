@@ -6,6 +6,7 @@ public class Window extends JFrame {
     private int FPS = 60;
     private GamePanel gamePanel;
     private MenuPanel menuPanel;
+    private InstructionsPanel instructionsPanel;
 
     public Window () {
         Image background = new ImageIcon("src\\gameImages\\basicGame\\bg-grid.png").getImage();
@@ -13,6 +14,9 @@ public class Window extends JFrame {
         menuPanel = new MenuPanel(background,WIDTH,HEIGHT,this);
         this.add(menuPanel);
         menuPanel.repaint();
+
+        instructionsPanel = new InstructionsPanel(WIDTH,HEIGHT,background,this);
+        this.add(instructionsPanel);
 
         WindowKeyListener windowKeyListener = new WindowKeyListener(this);
         this.addKeyListener(windowKeyListener);
@@ -36,7 +40,7 @@ public class Window extends JFrame {
         gamePanel.setVisible(!gamePanel.isVisible());
         gamePanel.resume();
     }
-    public void switchPanels(){
+    public void switchBetweenMenuAndGame(){
         gamePanel.setFocusable(!gamePanel.isFocusable());
         gamePanel.setVisible(!gamePanel.isVisible());
         if (gamePanel.isVisible()){
@@ -47,5 +51,17 @@ public class Window extends JFrame {
         }
         menuPanel.setFocusable(!menuPanel.isFocusable());
         menuPanel.setVisible(!menuPanel.isVisible());
+    }
+    public void switchBetweenMenuAndInstructions(){
+        menuPanel.setFocusable(!menuPanel.isFocusable());
+        menuPanel.setVisible(!menuPanel.isVisible());
+        instructionsPanel.setFocusable(!instructionsPanel.isFocusable());
+        instructionsPanel.setVisible(!instructionsPanel.isVisible());
+        if (instructionsPanel.isVisible()){
+            instructionsPanel.repaint();
+        }
+        else {
+            menuPanel.repaint();
+        }
     }
 }
