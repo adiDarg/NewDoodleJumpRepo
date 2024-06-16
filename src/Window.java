@@ -7,23 +7,23 @@ public class Window extends JFrame {
     private GamePanel gamePanel;
     private MenuPanel menuPanel;
     private InstructionsPanel instructionsPanel;
-
+    private EndPanel endPanel;
+    private final Image BACKGROUND;
     public Window () {
-        Image background = new ImageIcon("src\\gameImages\\basicGame\\bg-grid.png").getImage();
+        BACKGROUND = new ImageIcon("src\\gameImages\\basicGame\\bg-grid.png").getImage();
 
-        menuPanel = new MenuPanel(background,WIDTH,HEIGHT,this);
+        menuPanel = new MenuPanel(BACKGROUND,WIDTH,HEIGHT,this);
         this.add(menuPanel);
         menuPanel.repaint();
 
-        instructionsPanel = new InstructionsPanel(WIDTH,HEIGHT,background,this);
+        instructionsPanel = new InstructionsPanel(WIDTH,HEIGHT,BACKGROUND,this);
         this.add(instructionsPanel);
 
         WindowKeyListener windowKeyListener = new WindowKeyListener(this);
         this.addKeyListener(windowKeyListener);
 
-        gamePanel = new GamePanel(0, 0, WIDTH, HEIGHT,FPS,background,windowKeyListener);
+        gamePanel = new GamePanel(0, 0, WIDTH, HEIGHT,FPS,BACKGROUND,windowKeyListener,this);
         this.add(gamePanel);
-
 
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -63,5 +63,15 @@ public class Window extends JFrame {
         else {
             menuPanel.repaint();
         }
+    }
+    public void endGame(int finalScore){
+        endPanel = new EndPanel(WIDTH,HEIGHT,BACKGROUND,this, finalScore);
+        this.add(endPanel);
+        gamePanel.setVisible(false);
+        endPanel.setVisible(true);
+    }
+    public void newGame(){
+        new Window();
+        this.dispose();
     }
 }

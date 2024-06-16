@@ -21,14 +21,16 @@ public class GamePanel extends JPanel {
     private final Image BACKGROUND;
     private int level;
     private boolean isPaused;
-    public GamePanel(int x, int y, int width, int height, int FPS, Image background, WindowKeyListener windowKeyListener){
+    private Window window;
+    public GamePanel(int x, int y, int width, int height, int FPS, Image background, WindowKeyListener windowKeyListener, Window window){
         this.level = 1;
         this.BACKGROUND = background;
         SCREEN_WIDTH = width;
         SCREEN_HEIGHT = height;
         this.FPS = FPS;
+        this.window = window;
         this.arePlatformsAdded = false;
-        isPaused = false;
+        this.isPaused = false;
 
         setBounds(x,y,SCREEN_WIDTH,SCREEN_HEIGHT);
         setLayout(null);
@@ -53,7 +55,7 @@ public class GamePanel extends JPanel {
         for (int i = 1; i <= FPS; i++){
             int yDifference = (int) ((Math.pow(doodle.getMAX_SPEED(),2)/ (2 * doodle.getCurrentGravity()) + doodle.getHEIGHT())/FPS);
 
-            if (i % 15 == 0){
+            if (i % 30 == 0){
                 arePlatformsAdded = true;
                 Platform.generatePlatforms(MIN_PLATFORM_LENGTH,MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT, -yDifference,0,SCREEN_WIDTH, (ArrayList<Platform>) platforms, level);
                 arePlatformsAdded = false;
@@ -81,6 +83,7 @@ public class GamePanel extends JPanel {
                 if (doodle.getSpeed() <= doodle.getMAX_SPEED() + (double) (doodle.getCurrentGravity() * FPS) / 1000 && doodle.getY() <= SCREEN_HEIGHT/2 && doodle.getMaxHeight() > (double) SCREEN_HEIGHT / 2 + doodle.getMAX_SPEED())
                     new Thread(this::adjustScreen).start();
                 if (doodle.hasLost(SCREEN_HEIGHT)){
+                    window.endGame((int)doodle.getMaxHeight());
                     break;
                 }
                 repaint();
@@ -92,7 +95,6 @@ public class GamePanel extends JPanel {
             }
         });
         gameThread.start();
-        //ADD LOST SCREEN
     }
     public void pause(){
         isPaused = true;

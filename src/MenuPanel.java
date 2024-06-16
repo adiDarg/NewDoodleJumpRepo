@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.LinkedList;
 
 public class MenuPanel extends JPanel {
     private ImageIconButton howToPlay;
@@ -63,5 +64,6 @@ public class MenuPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponents(g);
         g.drawImage(BACKGROUND,0,0,WIDTH,HEIGHT,this);
+        g.drawImage(new ImageIcon("src\\gameImages\\Doodle Jump\\hole@2x.png").getImage(),0,0,null);
     }
 }
