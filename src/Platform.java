@@ -69,10 +69,10 @@ public class Platform {
                 if (random.nextInt(1,20) == 1){
                     platform = new SpringPlatform(random.nextInt(minWidth,maxWidth),height);
                 }
-                else if ((level >= 50 && random.nextInt(1,15) == 1)||(level <= 50 && (random.nextInt(1,5 - level/5) == 1))){
+                else if ((level >= 50 && random.nextInt(1,15) == 1)||(level <= 50 && (random.nextInt(1,10 - level/5) == 1))){
                     platform = new FallingPlatform(random.nextInt(minWidth,maxWidth),height);
                 }
-                else if ((level >= 50 && random.nextInt(1,15) == 1)||(level <= 50 && (random.nextInt(1,5 - level/5) == 1))){
+                else if ((level >= 50 && random.nextInt(1,15) == 1)||(level <= 50 && (random.nextInt(1,10 - level/5) == 1))){
                     int minSpeedMovePlatform = 40;
                     int maxSpeedMovePlatform = 50;
                     platform = new MovingPlatform(random.nextInt(minWidth,maxWidth),height,random.nextInt(minSpeedMovePlatform,maxSpeedMovePlatform));
