@@ -24,12 +24,12 @@ public class MovingPlatform extends Platform{
             this.setX(this.getX() + (int)deltaX);
             deltaX -= (int) deltaX;
         }
-        int RANGE = 150;
-        if (this.getX() > this.minX + RANGE || this.getX() < this.minX){
+        int range = 150;
+        if (this.getX() > this.minX + range || this.getX() < this.minX){
             direction *= -1;
         }
-        if (this.getX() > this.minX + RANGE){
-            this.setX(this.minX + RANGE - 1);
+        if (this.getX() > this.minX + range){
+            this.setX(this.minX + range - 1);
         }
         if (this.getX() < this.minX){
             this.setX(this.minX + 1);
