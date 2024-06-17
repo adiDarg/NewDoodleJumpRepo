@@ -2,7 +2,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class WindowKeyListener implements KeyListener {
-    private Window window;
+    private final Window window;
     public WindowKeyListener(Window window){
         this.window = window;
     }

@@ -1,0 +1,12 @@
+Your character is set in a world of platforms. Your goal is to get as far as possible.
+If you fall under the bottom of the screen you lose.
+Use the arrow keys on your keyboard to move between left and right.
+Touching either of the walls will teleport you to the other side.
+As your height increases the platforms will decrease in size until reaching a minimal height.
+Some of the platforms will have springs on them.
+Landing on the springs will launch you in the air,
+giving you a much greater speed than a normal jump would.
+The blue platforms are shifting from left to right,
+They will become more frequent as you get higher.
+The brown platforms will break after you jump on them.
+You can pause at any point by pressing the ESCAPE button.

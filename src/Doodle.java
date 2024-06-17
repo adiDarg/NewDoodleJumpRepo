@@ -2,6 +2,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Random;
 
 public class Doodle {
     private int x,y;
@@ -11,26 +12,27 @@ public class Doodle {
     private final int WIDTH = 70;
     private final int HEIGHT = 70;
     private double speed;
-    private final double HORIZONTAL_SPEED = 4.5;
-    private final int NORMAL_GRAVITY = 30;
-    private int currentGravity;
-    private final int MAX_SPEED = -110;
+    private final int GRAVITY = 35;
+    private final int MAX_SPEED = -130;
     private Image sprite;
     private final Image FACE_LEFT =  new ImageIcon("src\\gameImages\\basicGame\\doodleL.png").getImage();
     private final Image FACE_RIGHT = new ImageIcon("src\\gameImages\\basicGame\\doodleR.png").getImage();
     private int horizontalMoveDirection;
-    public Doodle(int screenHeight, int x, int y){
-        currentGravity = NORMAL_GRAVITY;
+    public Doodle(int x, int y){
         this.x = x;
         this.y = y;
         deltaY = 0;
         speed = 0;
-        maxHeightReached = screenHeight - y;
-        currentHeight = screenHeight - y;
+        maxHeightReached = 0;
+        currentHeight = 0;
         sprite = FACE_LEFT;
     }
-    private void jump(){
+    public void jump(){
         speed = MAX_SPEED;
+    }
+    public void superJump(){
+        Random random = new Random();
+        speed = random.nextDouble(1.1,2) * MAX_SPEED;
     }
     public double getSpeed(){
         return speed;
@@ -38,6 +40,7 @@ public class Doodle {
     public int getMAX_SPEED(){
         return MAX_SPEED;
     }
+    public int getX(){return x;}
     public int getY(){
         return y;
     }
@@ -47,16 +50,14 @@ public class Doodle {
     public int getHEIGHT(){
         return HEIGHT;
     }
-    public int getCurrentGravity(){
-        return currentGravity;
-    }
-    public void setSpeed(double speed){
-        this.speed = speed;
+    public int getGRAVITY(){
+        return GRAVITY;
     }
     public void setHorizontalMoveDirection(int horizontalMoveDirection){
         this.horizontalMoveDirection = horizontalMoveDirection;
     }
     public void moveHorizontal(int screenWidth){
+        double HORIZONTAL_SPEED = 4.5;
         x += (int) (horizontalMoveDirection * HORIZONTAL_SPEED);
         if (x <= -this.WIDTH){
             x = screenWidth;
@@ -91,17 +92,24 @@ public class Doodle {
             }
             maxHeightReached = currentHeight;
         }
-        speed += currentGravity *deltaSeconds;
+        speed += GRAVITY *deltaSeconds;
     }
-    public void checkCollision(double deltaSeconds,List<Platform> platformList){
+    public int checkCollisionWithPlatforms(List<Platform> platformList){
         try {
-            for (Platform platform: platformList){
-                if (doodleAlignedWithPlatform(platform,deltaSeconds)){
-                    jump();
-                    break;
+            for (Platform platform: platformList) {
+                if (!checkCollisionWithPlatform(platform)) {
+                    continue;
                 }
+                if (!(platform instanceof SpringPlatform)) {
+                    return 1;
+                }
+                if (!(((SpringPlatform) platform).didHitSpring(this))) {
+                    return 1;
+                }
+                return 2;
             }
         } catch (Exception ignored){}
+        return 0;
     }
     public boolean hasLost(int screenHeight){
         return y > screenHeight;
@@ -109,19 +117,7 @@ public class Doodle {
     public double getMaxHeight(){
         return maxHeightReached;
     }
-    public void fly(){
-        new Thread(()->{
-            currentGravity = 0;
-            speed = MAX_SPEED;
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            currentGravity = NORMAL_GRAVITY;
-        }).start();
-    }
-    private boolean doodleAlignedWithPlatform(Platform platform, double deltaSeconds){
+    public boolean checkCollisionWithPlatform(Platform platform){
         return (this.x + this.WIDTH >= platform.getX() && this.x <= platform.getX() + platform.getWidth()) &&
                 (platform.getY() - this.y <= this.HEIGHT && platform.getY() - this.y >= this.HEIGHT * 7 / 8 && speed > 0);
     }

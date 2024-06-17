@@ -3,11 +3,9 @@ import java.awt.*;
 public class Window extends JFrame {
     public static final int WIDTH = 500;
     public static final int HEIGHT = 800;
-    private final int FPS = 60;
-    private GamePanel gamePanel;
-    private MenuPanel menuPanel;
-    private InstructionsPanel instructionsPanel;
-    private EndPanel endPanel;
+    private final GamePanel gamePanel;
+    private final MenuPanel menuPanel;
+    private final InstructionsPanel instructionsPanel;
     private final Image BACKGROUND;
     public Window () {
         BACKGROUND = new ImageIcon("src\\gameImages\\basicGame\\bg-grid.png").getImage();
@@ -22,7 +20,8 @@ public class Window extends JFrame {
         WindowKeyListener windowKeyListener = new WindowKeyListener(this);
         this.addKeyListener(windowKeyListener);
 
-        gamePanel = new GamePanel(0, 0, WIDTH, HEIGHT,FPS,BACKGROUND,windowKeyListener,this);
+        int FPS = 60;
+        gamePanel = new GamePanel(0, 0, WIDTH, HEIGHT, FPS,BACKGROUND,windowKeyListener,this);
         this.add(gamePanel);
 
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -65,7 +64,7 @@ public class Window extends JFrame {
         }
     }
     public void endGame(int finalScore){
-        endPanel = new EndPanel(WIDTH,HEIGHT,BACKGROUND,this, finalScore);
+        EndPanel endPanel = new EndPanel(WIDTH, HEIGHT, BACKGROUND, this, finalScore);
         this.add(endPanel);
         gamePanel.setVisible(false);
         endPanel.setVisible(true);

@@ -2,17 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
 
 public class EndPanel extends JPanel {
-    private final Image BACKGROUND;
+    private final Image background;
     private final int WIDTH;
     private final int HEIGHT;
-    private final int PADDING = 10;
-    private final int HEAD_LINE_LENGTH = 50;
-    private final int BODY_LINE_LENGTH = 30;
+
     public EndPanel(int screenWidth, int screenHeight, Image background, Window window, int finalScore) {
-        this.BACKGROUND = background;
+        this.background = background;
         this.WIDTH = screenWidth;
         this.HEIGHT = screenHeight;
         this.setBounds(0, 0, WIDTH, HEIGHT);
@@ -20,8 +17,11 @@ public class EndPanel extends JPanel {
         this.setLayout(null);
 
         JLabel head = new JLabel("GAME OVER", SwingConstants.CENTER);
+        int HEAD_LINE_LENGTH = 50;
         head.setBounds(0, 100, screenWidth, HEAD_LINE_LENGTH);
         JLabel body = new JLabel("Best Height Reached: " + finalScore, SwingConstants.CENTER);
+        int PADDING = 10;
+        int BODY_LINE_LENGTH = 30;
         body.setBounds(0,100 + HEAD_LINE_LENGTH + PADDING, screenWidth, BODY_LINE_LENGTH);
 
         Font customFont;
@@ -59,6 +59,6 @@ public class EndPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(BACKGROUND,0,0,WIDTH,HEIGHT,this);
+        g.drawImage(background,0,0,WIDTH,HEIGHT,this);
     }
 }

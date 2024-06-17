@@ -1,10 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.LinkedList;
 
 public class MenuPanel extends JPanel {
-    private ImageIconButton howToPlay;
-    private ImageIconButton switchToGame;
+    private final ImageIconButton switchToGame;
     private final Image BACKGROUND;
     private final int WIDTH;
     private final int HEIGHT;
@@ -20,11 +18,11 @@ public class MenuPanel extends JPanel {
         this.setLayout(null);
         this.setFocusable(true);
 
-        howToPlay = new ImageIconButton(new ImageIcon("src\\gameImages\\InstructionsWhite.png"),
+        ImageIconButton howToPlay = new ImageIconButton(new ImageIcon("src\\gameImages\\InstructionsWhite.png"),
                 new ImageIcon("src\\gameImages\\InstructionsRed.png"));
         howToPlay.scaleIcons(BUTTON_WIDTH,BUTTON_HEIGHT);
-        howToPlay.setBounds((Window.WIDTH-howToPlay.getIconWidth())/2, Window.HEIGHT/2  - howToPlay.getIconHeight(),
-                howToPlay.getIconWidth(),howToPlay.getIconHeight());
+        howToPlay.setBounds((Window.WIDTH- howToPlay.getIconWidth())/2, Window.HEIGHT/2  - howToPlay.getIconHeight(),
+                howToPlay.getIconWidth(), howToPlay.getIconHeight());
 
         howToPlay.setContentAreaFilled(false);
         howToPlay.setBorderPainted(false);

@@ -25,6 +25,13 @@ public class Platform {
         this.height = height;
         sprite = new ImageIcon("src\\gameImages\\basicGame\\p-green.png").getImage();
     }
+
+    protected void setSprite(Image sprite){
+        this.sprite = sprite;
+    }
+    protected void setX(int x){
+        this.x = x;
+    }
     public static void addToList(Platform platformToAdd,List<Platform> platformList, int lowerBound, int upperBound, int screenWidth){
         Random random = new Random();
         boolean validLocation = true;
@@ -47,7 +54,7 @@ public class Platform {
     }
     public static void generatePlatforms(int minWidth,int maxWidth, int height,int minY, int maxY, int screenWidth, ArrayList<Platform> existingPlatforms, int level){
         Random random = new Random();
-        for (int i = minY; i<= maxY; i += MINIMUM_Y_DISTANCE - 1){
+        for (int i = minY; i<= maxY; i += MINIMUM_Y_DISTANCE){
             try {
                 if (minWidth * Math.pow(0.9,level) > MINIMUM_PLATFORM_SIZE){
                     minWidth = (int)((double)minWidth * Math.pow(0.95,level - 1));
@@ -55,13 +62,28 @@ public class Platform {
                 }
                 else {
                     minWidth = MINIMUM_PLATFORM_SIZE;
-                    maxWidth = MINIMUM_PLATFORM_SIZE + 2;
+                    maxWidth = MINIMUM_PLATFORM_SIZE + 20;
                 }
-                Platform platform = new Platform(random.nextInt(minWidth,maxWidth),height);
-                Platform.addToList(platform,existingPlatforms,i,i + MINIMUM_Y_DISTANCE,screenWidth - maxWidth);
+                Platform platform;
+                if (random.nextInt(1,15) == 1){
+                    platform = new SpringPlatform(random.nextInt(minWidth,maxWidth),height);
+                }
+                else if ((level <= 50 && random.nextInt(1,15 - level/5) == 1)||
+                        (level > 50 && random.nextInt(1,5) == 1)){
+                    int speed = random.nextInt(20,30);
+                    platform = new MovingPlatform(random.nextInt(minWidth,maxWidth),height,speed);
+                }
+                else if ((level <= 50 && random.nextInt(1,15 - level/5) == 1)||
+                        (level > 50 && random.nextInt(1,5) == 1)){
+                    platform = new FallingPlatform(random.nextInt(minWidth,maxWidth),height);
+                }
+                else {
+                    platform = new Platform(random.nextInt(minWidth,maxWidth),height);
+                }
+                Platform.addToList(platform,existingPlatforms,i,i + MINIMUM_Y_DISTANCE, screenWidth - maxWidth);
             }
-            catch (Exception e){
-                break;
+            catch (Exception ignored){
+                i-= MINIMUM_Y_DISTANCE;
             }
         }
     }
@@ -74,6 +96,7 @@ public class Platform {
     public int getWidth(){
         return width;
     }
+    protected int getHeight(){return height;}
     public void lower(int deltaY){
         y += deltaY;
     }
