@@ -41,7 +41,7 @@ public class GamePanel extends JPanel {
 
         doodle = new Doodle(SCREEN_WIDTH/2,2*SCREEN_HEIGHT/3);
 
-        Platform starter = new Platform(MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT,SCREEN_WIDTH/2 - MAX_PLATFORM_LENGTH/2,2*SCREEN_HEIGHT/3 + doodle.getHEIGHT());
+        Platform starter = new Platform(MAX_PLATFORM_LENGTH,PLATFORM_HEIGHT,SCREEN_WIDTH/2 - MAX_PLATFORM_LENGTH/2,2*SCREEN_HEIGHT/3 + doodle.getHEIGHT(), new ImageIcon("gameImages\\basicGame\\p-green.png").getImage());
         platforms.add(starter);
 
         DoodleKeyListener keyListener = new DoodleKeyListener(doodle, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT);
