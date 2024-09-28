@@ -3,6 +3,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class InstructionsPanel extends JPanel {
@@ -39,8 +40,8 @@ public class InstructionsPanel extends JPanel {
         Font customFont;
         Font customFontTitle;
         try {
-           customFontTitle = Font.createFont(Font.TRUETYPE_FONT, new File("src/al_seana/al-seana.ttf")).deriveFont(60f);
-           customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/al_seana/al-seana.ttf")).deriveFont(24f);
+           customFontTitle = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(getClass().getResourceAsStream("/al_seana/al-seana.ttf"))).deriveFont(60f);
+           customFont = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(getClass().getResourceAsStream("/al_seana/al-seana.ttf"))).deriveFont(15f);
         } catch (FontFormatException | IOException e) {
             customFont = new Font("Serif", Font.PLAIN, 12);
             customFontTitle = new Font("Serif", Font.PLAIN, 50);

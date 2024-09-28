@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
+
 public class Window extends JFrame {
     public static final int WIDTH = 500;
     public static final int HEIGHT = 800;
@@ -8,7 +10,7 @@ public class Window extends JFrame {
     private final InstructionsPanel instructionsPanel;
     private final Image BACKGROUND;
     public Window () {
-        BACKGROUND = new ImageIcon("src\\gameImages\\basicGame\\bg-grid.png").getImage();
+        BACKGROUND = new ImageIcon(Objects.requireNonNull(getClass().getResource("/gameImages/basicGame/bg-grid.png"))).getImage();
 
         menuPanel = new MenuPanel(BACKGROUND,WIDTH,HEIGHT,this);
         this.add(menuPanel);

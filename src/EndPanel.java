@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 public class EndPanel extends JPanel {
     private final Image background;
@@ -27,14 +28,14 @@ public class EndPanel extends JPanel {
         Font customFont;
         Font customFontTitle;
         try {
-            customFontTitle = Font.createFont(Font.TRUETYPE_FONT, new File("src/al_seana/al-seana.ttf")).deriveFont(60f);
-            customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/al_seana/al-seana.ttf")).deriveFont(24f);
-            head.setFont(customFontTitle);
-            body.setFont(customFont);
+            customFont = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(getClass().getResourceAsStream("/al_seana/al-seana.ttf"))).deriveFont(24f);
+            customFontTitle = customFont.deriveFont(48f);
         } catch (FontFormatException | IOException e) {
-            throw new RuntimeException(e);
+            customFont = new Font("Serif", Font.PLAIN, 12);
+            customFontTitle = customFont.deriveFont(24f);
         }
-
+        head.setFont(customFontTitle);
+        body.setFont(customFont);
         this.add(head);
         this.add(body);
 

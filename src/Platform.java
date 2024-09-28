@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class Platform {
@@ -16,14 +17,14 @@ public class Platform {
     public Platform(int width, int height, int x, int y, Image image){
         this.width = width;
         this.height = height;
-        sprite = new ImageIcon("src\\gameImages\\basicGame\\p-green.png").getImage();
+        sprite = new ImageIcon(Objects.requireNonNull(getClass().getResource("/gameImages/basicGame/p-green.png"))).getImage();
         this.x = x;
         this.y = y;
     }
     public Platform(int width, int height){
         this.width = width;
         this.height = height;
-        sprite = new ImageIcon("src\\gameImages\\basicGame\\p-green.png").getImage();
+        sprite = new ImageIcon(Objects.requireNonNull(getClass().getResource("/gameImages/basicGame/p-green.png"))).getImage();
     }
 
     protected void setSprite(Image sprite){

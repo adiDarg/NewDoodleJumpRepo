@@ -2,6 +2,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class Doodle {
@@ -15,8 +16,8 @@ public class Doodle {
     private final int GRAVITY = 35;
     private final int MAX_SPEED = -130;
     private Image sprite;
-    private final Image FACE_LEFT =  new ImageIcon("src\\gameImages\\basicGame\\doodleL.png").getImage();
-    private final Image FACE_RIGHT = new ImageIcon("src\\gameImages\\basicGame\\doodleR.png").getImage();
+    private final Image FACE_LEFT =  new ImageIcon(Objects.requireNonNull(getClass().getResource("/gameImages/basicGame/doodleL.png"))).getImage();
+    private final Image FACE_RIGHT = new ImageIcon(Objects.requireNonNull(getClass().getResource("/gameImages/basicGame/doodleR.png"))).getImage();
     private int horizontalMoveDirection;
     public Doodle(int x, int y){
         this.x = x;

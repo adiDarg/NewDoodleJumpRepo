@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class MenuPanel extends JPanel {
     private final ImageIconButton switchToGame;
@@ -18,8 +19,8 @@ public class MenuPanel extends JPanel {
         this.setLayout(null);
         this.setFocusable(true);
 
-        ImageIconButton howToPlay = new ImageIconButton(new ImageIcon("src\\gameImages\\InstructionsWhite.png"),
-                new ImageIcon("src\\gameImages\\InstructionsRed.png"));
+        ImageIconButton howToPlay = new ImageIconButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/gameImages/InstructionsWhite.png"))),
+                new ImageIcon( Objects.requireNonNull(getClass().getResource("/gameImages/InstructionsRed.png"))));
         howToPlay.scaleIcons(BUTTON_WIDTH,BUTTON_HEIGHT);
         howToPlay.setBounds((Window.WIDTH- howToPlay.getIconWidth())/2, Window.HEIGHT/2  - howToPlay.getIconHeight(),
                 howToPlay.getIconWidth(), howToPlay.getIconHeight());
@@ -33,8 +34,8 @@ public class MenuPanel extends JPanel {
         });
         this.add(howToPlay);
 
-        switchToGame = new ImageIconButton(new ImageIcon("src\\gameImages\\Doodle Jump\\play.png"),
-                new ImageIcon("src\\gameImages\\Doodle Jump\\play-on.png"));
+        switchToGame = new ImageIconButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/gameImages/Doodle Jump/play.png"))),
+                new ImageIcon(Objects.requireNonNull(getClass().getResource("/gameImages/Doodle Jump/play-on.png"))));
         switchToGame.scaleIcons(BUTTON_WIDTH,BUTTON_HEIGHT);
         switchToGame.setBounds((Window.WIDTH-switchToGame.getIconWidth())/2, Window.HEIGHT/2 + switchToGame.getIconHeight(),
                 switchToGame.getIconWidth(),switchToGame.getIconHeight());
@@ -45,10 +46,10 @@ public class MenuPanel extends JPanel {
         this.add(switchToGame);
 
         switchToGame.addActionListener((event) ->{
-            ImageIcon resumeButton = new ImageIcon("src\\gameImages\\Doodle Jump\\resume.png");
+            ImageIcon resumeButton = new ImageIcon(Objects.requireNonNull(getClass().getResource("/gameImages/Doodle Jump/resume.png")));
             switchToGame.setIcon(resumeButton);
 
-            ImageIcon resumeInRed = new ImageIcon("src\\gameImages\\Doodle Jump\\resume-on.png");
+            ImageIcon resumeInRed = new ImageIcon(Objects.requireNonNull(getClass().getResource("/gameImages/Doodle Jump/resume-on.png")));
             switchToGame.setPressedIcon(resumeInRed);
 
             switchToGame.scaleIcons(BUTTON_WIDTH,BUTTON_HEIGHT);
@@ -62,6 +63,6 @@ public class MenuPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponents(g);
         g.drawImage(BACKGROUND,0,0,WIDTH,HEIGHT,this);
-        g.drawImage(new ImageIcon("src\\gameImages\\Doodle Jump\\hole@2x.png").getImage(),0,0,null);
+        g.drawImage(new ImageIcon(Objects.requireNonNull(getClass().getResource("/gameImages/Doodle Jump/hole@2x.png"))).getImage(),0,0,null);
     }
 }

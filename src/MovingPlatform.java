@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.util.Objects;
 
 public class MovingPlatform extends Platform{
     private final int SPEED;
@@ -10,7 +11,7 @@ public class MovingPlatform extends Platform{
         super(width, height);
         this.SPEED = speed;
         this.direction = 1;
-        setSprite(new ImageIcon("src\\gameImages\\basicGame\\p-blue.png").getImage());
+        setSprite(new ImageIcon(Objects.requireNonNull(getClass().getResource("/gameImages/basicGame/p-blue.png"))).getImage());
         minX = -1;
     }
     private void defineMinX(){
