@@ -39,14 +39,15 @@ public class InstructionsPanel extends JPanel {
         Font customFont;
         Font customFontTitle;
         try {
-           customFontTitle = Font.createFont(Font.TRUETYPE_FONT, new File("src/al_seana/al-seana.ttf")).deriveFont(60f);
-           customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/al_seana/al-seana.ttf")).deriveFont(24f);
-           head.setFont(customFontTitle);
-           for (JLabel label: body){
-               label.setFont(customFont);
-           }
+           customFontTitle = Font.createFont(Font.TRUETYPE_FONT, new File("al_seana/al-seana.ttf")).deriveFont(60f);
+           customFont = Font.createFont(Font.TRUETYPE_FONT, new File("al_seana/al-seana.ttf")).deriveFont(24f);
         } catch (FontFormatException | IOException e) {
-            throw new RuntimeException(e);
+            customFont = new Font("Serif", Font.PLAIN, 12);
+            customFontTitle = new Font("Serif", Font.PLAIN, 50);
+        }
+        head.setFont(customFontTitle);
+        for (JLabel label: body){
+            label.setFont(customFont);
         }
         this.add(head);
         for (JLabel label: body){

@@ -53,10 +53,10 @@ public class GamePanel extends JPanel {
         Font customFont;
         try {
             customFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/al_seana/al-seana.ttf")).deriveFont(30f);
-            displayScore.setFont(customFont);
         } catch (FontFormatException | IOException e) {
-            throw new RuntimeException(e);
+            customFont = new Font("Serif", Font.PLAIN, 30);
         }
+        displayScore.setFont(customFont);
         this.add(displayScore);
 
         setVisible(false);
